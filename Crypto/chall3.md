@@ -29,10 +29,13 @@ print(remain)
 #[88952575866827947965983024351948428571644045481852955585307229868427303211803239917835211249629755846575548754617810635567272526061976590304647326424871380247801316189016325247, 67077340815509559968966395605991498895734870241569147039932716484176494534953008553337442440573747593113271897771706973941604973691227887232994456813209749283078720189994152242]
 ```
 
-The comments in the challenge hinted that these values were generated from a small linear system involving the terms
-`13^(secret - 1)` and `37^(secret - 1)`.
+## Flag:
+`idek{charles_and_the_chocolate_factory!!!}`
 
 ## Solution
+
+The comments in the challenge hinted that these values were generated from a small linear system involving the terms
+`13^(secret - 1)` and `37^(secret - 1)`.
 
 ### Step 1 — Understanding the Equations
 
@@ -94,8 +97,30 @@ secret = k + 1
 
 Finally, I had the complete script to get the flag
 
-## Flag:
-`idek{charles_and_the_chocolate_factory!!!}`
+```python
+from Crypto.Util.number import long_to_bytes
+from sympy.ntheory import discrete_log
+p = 396430433566694153228963024068183195900644000015629930982017434859080008533624204265038366113052353086248115602503012179807206251960510130759852727353283868788493357310003786807
+r0 = 88952575866827947965983024351948428571644045481852955585307229868427303211803239917835211249629755846575548754617810635567272526061976590304647326424871380247801316189016325247
+r1 = 67077340815509559968966395605991498895734870241569147039932716484176494534953008553337442440573747593113271897771706973941604973691227887232994456813209749283078720189994152242
+inv24 = pow(24, -1, p)
+y = ((r1 - 13 * r0) * inv24) % p
+x = (r0 - y) % p
+print("[*] System solved")
+print(f"    -> x = {x}")
+print(f"    -> y = {y}")
+print("\n[*] Discrete log: ")
+exp = discrete_log(p, x, 13) 
+secret = exp + 1
+flag = long_to_bytes(secret)
+try:
+    print(f"\n[+] Flag: {flag.decode()}")
+except UnicodeDecodeError:
+    print(f"\n[+] Flag (raw bytes): {flag}")
+    print(f"[+] Flag (hex): {flag.hex()}")
+```
+
+<img width="1462" height="275" alt="image" src="https://github.com/user-attachments/assets/1f90a285-1f3c-428f-831f-032bf1d23318" />
 
 ## Key Takeaways
 
