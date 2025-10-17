@@ -204,6 +204,11 @@ int main(int argc, char **argv, char **envp)
 
     challenge(argc, argv, envp);
 ```
+Here, in the struct, there is a 71 byte input buffer and `win_variable` which must become non zero to get the flag while `lose_variable` remains zero.
+
+First, I ran `python3 -c "from pwn import *; r = process('./binary-exploitation-lose-variable-w'); r.send(b'A'*120+p32(0x1)
+); print(r.readall())"`, but this set `lose_variable` to non zero too as shown, which didnt get me the flag.
+
 ```
 hacker@binary-exploitation~precision-easy:/challenge$ python3 -c "from pwn import *; r = process('./binary-exploitation-lose-variable-w'); r.send(b'A'*120+p32(0x1)
 ); print(r.readall())"
